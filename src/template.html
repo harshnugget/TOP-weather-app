@@ -5,12 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title></title>
+    <title>Weather App</title>
 </head>
 
 <body>
-    <header></header>
-    <main></main>
+    <header>Weather App</header>
+    <main>
+        <div>
+            <label for="location-input">Location: </label>
+            <input id="location-input" type="text" name="location-input">
+            <button id="get-weather-btn" type="button">Get weather</button>
+        </div>
+        <div id="today-weather">
+            <h2>Today</h2>
+            <h3>Conditions: <span class="conditions"></span></h3>
+            <h3>Temperature: <span class="temperature"></span></h3>
+        </div>
+    </main>
     <footer></footer>
 </body>
 
