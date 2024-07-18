@@ -5,10 +5,22 @@ const config = {
   entry: './src/index.js',
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/template.html'
+      template: './src/template.html',
     }),
   ],
   module: {
+    rules: [
+      {
+        test: /\.svg$/,
+        loader: 'svg-inline-loader',
+      },
+    ],
+    rules: [
+      {
+        test: /\.svg$/,
+        use: 'raw-loader',
+      },
+    ],
     rules: [
       {
         test: /\.css$/i,

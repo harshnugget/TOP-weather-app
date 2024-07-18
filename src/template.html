@@ -8,21 +8,39 @@
     <title>Weather App</title>
 </head>
 
-<body>
-    <header>Weather App</header>
-    <main>
-        <div>
-            <label for="location-input">Location: </label>
-            <input id="location-input" type="text" name="location-input">
-            <button id="get-weather-btn" type="button">Get weather</button>
-        </div>
-        <div id="today-weather">
-            <h2>Today</h2>
-            <h3>Conditions: <span class="conditions"></span></h3>
-            <h3>Temperature: <span class="temperature"></span></h3>
-        </div>
-    </main>
-    <footer></footer>
+<body style="opacity:0;">
+    <div class="container">
+        <header>
+            <h1>Weather App</h1>
+            <div id="location-input-container">
+                <label for="location-input">Location: </label>
+                <input id="location-input" type="text" name="location-input">
+                <button id="get-weather-btn" type="button">Get weather</button>
+            </div>
+        </header>
+        <main>
+            <div id="today-weather">
+                <h2>Today</h2>
+                <div class="weather-img-container">
+                </div>
+                <h3>Conditions: <span class="conditions"></span></h3>
+                <h3>Temperature: <span class="temperature"></span></h3>
+            </div>
+            <div class="scrolling-bar">
+                <div class="square" style="background-color: red;"></div>
+                <div class="square" style="background-color: blue;"></div>
+                <div class="square" style="background-color: green;"></div>
+                <div class="square" style="background-color: yellow;"></div>
+                <div class="square" style="background-color: purple;"></div>
+                <div class="square" style="background-color: orange;"></div>
+                <div class="square" style="background-color: cyan;"></div>
+                <div class="square" style="background-color: magenta;"></div>
+                <div class="square" style="background-color: pink;"></div>
+                <div class="square" style="background-color: brown;"></div>
+            </div>
+        </main>
+    </div>
+    <footer>harshnugget</footer>
 </body>
 
 </html>

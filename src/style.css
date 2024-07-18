@@ -1,3 +1,82 @@
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif; /* Font family */
+}
+
+body {
+  background-color: #ffffff;
+}
+
+body > .container {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  height: 100vh;
+}
+
+header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #fff; /* Text color */
+  padding: 10px; /* Padding around content */
+  text-transform: uppercase; /* Uppercase text */
+}
+
+header > #location-input-container {
+  display: flex;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+main > #today-weather {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#today-weather > .weather-img-container {
+  width: 200px;
+  height: 200px;
+}
+
+#today-weather > .weather-img-container > svg {
+  width: 100%;
+  height: 100%;
+}
+
+footer {
+  background-color: wheat;
+  text-align: center;
+}
+
+/* ############################################ */
+
+.scrolling-bar {
+  display: flex;
+  align-items: end;
+  width: max(800px, 200px);
+  height: 130px;
+  overflow-x: scroll;
+}
+
+.scrolling-bar .square {
+  width: 100px;
+  height: 100px;
+  flex: 0 0 auto;
+  transition:
+    width 0.3s ease,
+    height 0.3s ease; /* Smooth transition for size changes */
+  margin-right: 10px; /* Adjust spacing between squares */
+}
+
+.scrolling-bar .square.active {
+  width: 180px;
+  height: 130px;
 }
