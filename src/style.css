@@ -70,13 +70,11 @@ footer {
   width: 100px;
   height: 100px;
   flex: 0 0 auto;
-  transition:
-    width 0.3s ease,
-    height 0.3s ease; /* Smooth transition for size changes */
   margin-right: 10px; /* Adjust spacing between squares */
 }
 
-.scrolling-bar .square.active {
-  width: 180px;
-  height: 130px;
+/* ############################################ */
+.fade-out {
+  transition: opacity 1s ease;
+  opacity: 0;
 }

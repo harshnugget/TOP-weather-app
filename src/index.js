@@ -8,23 +8,29 @@ const locationInput = document.querySelector('#location-input');
 const getWeatherBtn = document.querySelector('#get-weather-btn');
 
 window.onload = () => {
+  // Show body contents after css is loaded
   document.body.style.opacity = 1;
 
   getWeatherBtn.addEventListener('click', () => {
+    // Retrieve value from the location input box
     const location = locationInput.value;
     if (!location) {
       return;
     }
     const weatherData = getWeatherData(formatLocation(location));
+    console.log(weatherData);
     handleWeatherData(weatherData);
   });
 
+  // Format the value to be compatible in URL
   function formatLocation(text) {
     return encodeURIComponent(text);
   }
 
   async function getWeatherData(location) {
-    return weatherObjectTest;
+    if (!location) {
+      return weatherObjectTest;
+    }
     try {
       const url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?unitGroup=metric&key=${KEY}&contentType=json`;
       const weatherData = await fetch(url);
@@ -71,6 +77,7 @@ window.onload = () => {
 
   // Initialize
   const weatherData = getWeatherData();
+  console.log(weatherData);
   handleWeatherData(weatherData);
 
   // TESTING
@@ -82,21 +89,3 @@ window.onload = () => {
 };
 
 // #########################################################################
-
-const scrollBar = document.querySelector('.scrolling-bar');
-const squares = document.querySelectorAll('.square');
-
-squares.forEach((sq) => {
-  sq.addEventListener('click', expand);
-});
-
-function expand(e) {
-  const activeTarget = scrollBar.querySelector('.active');
-  if (e.target.classList.contains('active')) {
-    e.target.classList.remove('active');
-    return;
-  } else if (activeTarget) {
-    activeTarget.classList.remove('active');
-  }
-  e.target.classList.add('active');
-}

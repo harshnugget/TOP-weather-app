@@ -9,77 +9,120 @@ import loadWeatherIcons from './weatherIcons';
 const UIController = (function () {
   const main = document.querySelector('main');
 
-  function changeBackgroundImage(url) {
-    // Select the current background image element
-    const currentImgElement = document.querySelector('.background-img');
+  const changeBackgroundImage = (function () {
+    let transitionFlag = 0;
+    let queuedBackgroundImgURL = null;
 
-    // Create a new <img> element for the new background image
-    const imgElement = document.createElement('img');
-    imgElement.src = url;
-    imgElement.classList.add('background-img');
-    imgElement.style.position = 'absolute'; // Fixed position to stay in the background
-    imgElement.style.top = '0';
-    imgElement.style.left = '0';
-    imgElement.style.width = '100%';
-    imgElement.style.height = '100%';
-    imgElement.style.objectFit = 'cover';
-    imgElement.style.zIndex = '-1'; // Set a negative z-index to appear behind all other content
+    return function (url) {
+      queuedBackgroundImgURL = url;
 
-    // Add mask-image for fading out edges
-    imgElement.style.maskImage =
-      'linear-gradient(to right, transparent, black 50%, black 50%, transparent)';
+      // Prevent repeat transitioning
+      if (transitionFlag === 1) {
+        return;
+      }
 
-    main.append(imgElement);
+      /* Select all background image elements
+      This is to allow for clean up if duplicates are accidentally created */
+      const currentImgElements = document.querySelectorAll('.background-img');
 
-    // Remove previous image element
-    if (currentImgElement) {
-      currentImgElement.remove();
-    }
-  }
+      // Select the most recently added current image element
+      const currentImgElement = currentImgElements[currentImgElements.length - 1];
 
-  async function update(icon, condition, temp) {
+      // Create a new <img> element for the new background image
+      const imgElement = document.createElement('img');
+      imgElement.src = url;
+      imgElement.classList.add('background-img');
+      imgElement.style.position = 'absolute'; // Fixed position to stay in the background
+      imgElement.style.top = '0';
+      imgElement.style.left = '0';
+      imgElement.style.width = '100%';
+      imgElement.style.height = '100%';
+      imgElement.style.objectFit = 'cover';
+      imgElement.style.zIndex = '-2'; // Set a negative z-index to appear behind all other content
+
+      main.append(imgElement);
+
+      function fadeOutBackgroundImg() {
+        if (currentImgElement) {
+          // Set flag to prevent repeat transitions
+          transitionFlag = 1;
+
+          // Set current background image on top to allow for fade out effect
+          currentImgElement.style.zIndex = '-1';
+
+          // Add the fade-out class to start the transition
+          currentImgElement.classList.add('fade-out');
+
+          // Add an event listener for the transition end event
+          currentImgElement.addEventListener('transitionend', function handleTransitionEnd(event) {
+            // Ensure this event is for the opacity transition
+            if (event.propertyName === 'opacity') {
+              // Remove the background image elements
+              currentImgElements.forEach((element) => element.remove());
+
+              // Check if imgelement doesn't match the queued img
+              if (imgElement.src !== queuedBackgroundImgURL && transitionFlag === 1) {
+                // Reset flag to allow next transition
+                transitionFlag = 0;
+
+                // Transition to queued img
+                changeBackgroundImage(queuedBackgroundImgURL);
+              }
+
+              transitionFlag = 0;
+            }
+          });
+        }
+      }
+
+      // Call the function to start the fade transition
+      fadeOutBackgroundImg();
+    };
+  })();
+
+  const update = (function () {
     const todayContainer = document.querySelector('#today-weather');
     const todayConditions = todayContainer.querySelector('.conditions');
     const todayTemperature = todayContainer.querySelector('.temperature');
     const weatherImgContainer = todayContainer.querySelector('.weather-img-container');
-
     let weatherIcon;
 
-    // Retrieve weather icons object
-    const weatherIcons = await loadWeatherIcons();
+    return async function (icon, condition, temp) {
+      // Retrieve weather icons object
+      const weatherIcons = await loadWeatherIcons();
 
-    // FIX ME
-    // Change condition to look for icon instead
-    switch (icon.toLowerCase()) {
-      case 'rainy':
-        changeBackgroundImage(rainBg);
-        weatherIcon = weatherIcons.rainy;
-        break;
-      case 'cloudy':
-        changeBackgroundImage(cloudyBg);
-        weatherIcon = weatherIcons.cloudy;
-        break;
-      case 'partially cloudy':
-        changeBackgroundImage(partlyCloudyBg);
-        weatherIcon = weatherIcons.partlyCloudy;
-        break;
-      case 'stormy':
-        changeBackgroundImage(stormBg);
-        weatherIcon = weatherIcons.stormy;
-        break;
-      case 'snowy':
-        changeBackgroundImage(snowBg);
-        weatherIcon = weatherIcons.snowy;
-        break;
-      default:
-        changeBackgroundImage(clearSkyBg);
-        weatherIcon = weatherIcons.clear;
-    }
+      // Set weather icon and change background image
+      switch (icon.toLowerCase()) {
+        case 'rainy':
+          weatherIcon = weatherIcons.rainy;
+          changeBackgroundImage(rainBg);
+          break;
+        case 'cloudy':
+          weatherIcon = weatherIcons.cloudy;
+          changeBackgroundImage(cloudyBg);
+          break;
+        case 'partly-cloudy-day':
+          weatherIcon = weatherIcons.partlyCloudy;
+          changeBackgroundImage(partlyCloudyBg);
+          break;
+        case 'stormy':
+          weatherIcon = weatherIcons.stormy;
+          changeBackgroundImage(stormBg);
+          break;
+        case 'snowy':
+          weatherIcon = weatherIcons.snowy;
+          changeBackgroundImage(snowBg);
+          break;
+        default:
+          weatherIcon = weatherIcons.clear;
+          changeBackgroundImage(clearSkyBg);
+      }
 
-    weatherImgContainer.innerHTML = weatherIcon;
-    todayConditions.textContent = condition;
-    todayTemperature.textContent = temp;
-  }
+      weatherImgContainer.innerHTML = weatherIcon;
+      todayConditions.textContent = condition;
+      todayTemperature.textContent = temp;
+    };
+  })();
 
   return { update };
 })();
