@@ -19,9 +19,15 @@
             </div>
         </header>
         <main>
+            <div id="loadingModal" class="modal">
+                <div class="modal-content">
+                    <p>Loading...</p>
+                </div>
+            </div>
             <div id="today-weather">
-                <h2>Today</h2>
-                <div class="weather-img-container">
+                <h2 class="date">Today</h2>
+                <div class="weather-img-container image-carousel-container">
+                    <img src="" alt="">
                 </div>
                 <h3>Conditions: <span class="conditions"></span></h3>
                 <h3>Temperature: <span class="temperature"></span></h3>
@@ -37,6 +43,9 @@
                 <div class="square" style="background-color: magenta;"></div>
                 <div class="square" style="background-color: pink;"></div>
                 <div class="square" style="background-color: brown;"></div>
+            </div>
+            <div class="image-carousel-container">
+
             </div>
         </main>
     </div>

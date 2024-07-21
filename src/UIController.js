@@ -1,13 +1,10 @@
-import clearSkyBg from './images/wallpapers/sunny.png';
-import partlyCloudyBg from './images/wallpapers/partly_cloudy.png';
-import rainBg from './images/wallpapers/rainy.png';
-import stormBg from './images/wallpapers/stormy.png';
-import snowBg from './images/wallpapers/snowy.png';
-import cloudyBg from './images/wallpapers/cloudy.png';
-import loadWeatherIcons from './weatherIcons';
+import weatherImages from './weatherImages';
 
 const UIController = (function () {
   const main = document.querySelector('main');
+
+  // Create a timer for checking and updating background image
+  let timer = null;
 
   const changeBackgroundImage = (function () {
     let transitionFlag = 0;
@@ -50,8 +47,9 @@ const UIController = (function () {
           // Set current background image on top to allow for fade out effect
           currentImgElement.style.zIndex = '-1';
 
-          // Add the fade-out class to start the transition
-          currentImgElement.classList.add('fade-out');
+          // Add the fade-out transition styles
+          currentImgElement.style.transition = 'opacity 1s ease';
+          currentImgElement.style.opacity = '0';
 
           // Add an event listener for the transition end event
           currentImgElement.addEventListener('transitionend', function handleTransitionEnd(event) {
@@ -80,45 +78,65 @@ const UIController = (function () {
     };
   })();
 
+  const formatDate = (date) => {
+    let dateObj = new Date(date);
+
+    // Validate
+    if (isNaN(dateObj.getTime())) {
+      throw new Error(`Incorrect date format: ${date}`);
+    }
+
+    // Convert the date to UTC
+    const day = dateObj.getDate();
+    const monthIndex = dateObj.getMonth();
+    const year = dateObj.getFullYear();
+    dateObj = new Date(Date.UTC(year, monthIndex, day));
+
+    // Get today's date in UTC
+    const today = new Date();
+    const todayUTC = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()));
+
+    // Check if the input date is equal to today's date
+    if (dateObj.getTime() === todayUTC.getTime()) {
+      return 'Today';
+    }
+
+    // Define the formatting options
+    const options = {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+    };
+
+    // Format the dateObj using the options defined
+    const formattedDate = new Intl.DateTimeFormat('en-UK', options).format(dateObj);
+
+    return formattedDate;
+  };
+
   const update = (function () {
     const todayContainer = document.querySelector('#today-weather');
+    const dateElement = todayContainer.querySelector('.date');
     const todayConditions = todayContainer.querySelector('.conditions');
     const todayTemperature = todayContainer.querySelector('.temperature');
-    const weatherImgContainer = todayContainer.querySelector('.weather-img-container');
-    let weatherIcon;
 
-    return async function (icon, condition, temp) {
-      // Retrieve weather icons object
-      const weatherIcons = await loadWeatherIcons();
+    return function (icon, condition, temp, date) {
+      dateElement.textContent = formatDate(date);
 
-      // Set weather icon and change background image
-      switch (icon.toLowerCase()) {
-        case 'rainy':
-          weatherIcon = weatherIcons.rainy;
-          changeBackgroundImage(rainBg);
-          break;
-        case 'cloudy':
-          weatherIcon = weatherIcons.cloudy;
-          changeBackgroundImage(cloudyBg);
-          break;
-        case 'partly-cloudy-day':
-          weatherIcon = weatherIcons.partlyCloudy;
-          changeBackgroundImage(partlyCloudyBg);
-          break;
-        case 'stormy':
-          weatherIcon = weatherIcons.stormy;
-          changeBackgroundImage(stormBg);
-          break;
-        case 'snowy':
-          weatherIcon = weatherIcons.snowy;
-          changeBackgroundImage(snowBg);
-          break;
-        default:
-          weatherIcon = weatherIcons.clear;
-          changeBackgroundImage(clearSkyBg);
+      const backgroundImgElement = document.querySelector('.background-img');
+
+      // Update background image instantly if there isn't one
+      if (!backgroundImgElement) {
+        changeBackgroundImage(weatherImages(icon).bg);
+      } else {
+        // Set a timer to update background image after a set period of time
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          changeBackgroundImage(weatherImages(icon).bg);
+        }, 1000);
       }
 
-      weatherImgContainer.innerHTML = weatherIcon;
+      // Update weather conditions
       todayConditions.textContent = condition;
       todayTemperature.textContent = temp;
     };

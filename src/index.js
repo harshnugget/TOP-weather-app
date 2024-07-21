@@ -1,11 +1,13 @@
 import './style.css';
 import UIController from './UIController';
 import weatherObjectTest from './weatherObjectTest';
+import weatherCarousel from './weatherCarousel';
 
 const KEY = '8LS8VNK8Q95T49ELEPT3AUNV5';
 
 const locationInput = document.querySelector('#location-input');
 const getWeatherBtn = document.querySelector('#get-weather-btn');
+const modalContent = document.querySelector('#loadingModal > .modal-content');
 
 window.onload = () => {
   // Show body contents after css is loaded
@@ -18,7 +20,6 @@ window.onload = () => {
       return;
     }
     const weatherData = getWeatherData(formatLocation(location));
-    console.log(weatherData);
     handleWeatherData(weatherData);
   });
 
@@ -27,57 +28,73 @@ window.onload = () => {
     return encodeURIComponent(text);
   }
 
+  // Function to show loading modal
+  function showLoadingDialog() {
+    modalContent.style.visibility = 'visible'; // Show the modal as a flexbox
+    modalContent.querySelector('p').textContent = 'Loading...';
+  }
+
+  // Function to close loading modal
+  function closeLoadingModal() {
+    modalContent.style.visibility = 'hidden'; // Hide the modal
+  }
+
   async function getWeatherData(location) {
+    let weatherJSON;
+    // If no location provided use test weather object
     if (!location) {
-      return weatherObjectTest;
-    }
-    try {
-      const url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?unitGroup=metric&key=${KEY}&contentType=json`;
-      const weatherData = await fetch(url);
-      if (weatherData.status === 400) {
-        throw new Error('Invalid request!');
+      weatherJSON = weatherObjectTest;
+    } else {
+      try {
+        const url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?unitGroup=metric&key=${KEY}&contentType=json`;
+        const weatherData = await fetch(url);
+
+        // Open loading dialog while fetching url
+        showLoadingDialog();
+
+        if (weatherData.status === 400) {
+          throw new Error('Invalid request!');
+        }
+        weatherJSON = await weatherData.json();
+
+        // Close loading dialog
+        closeLoadingModal();
+      } catch (error) {
+        console.error(error);
+        modal.querySelector('p').textContent = 'Could not retrieve data';
+        throw error; // Reject promise
       }
-      const weatherJSON = await weatherData.json();
-      return weatherJSON;
-    } catch (error) {
-      console.error(error);
-      throw error; // Reject promise
     }
+
+    window.weatherJSON = weatherJSON; // For testing
+
+    weatherCarousel(weatherJSON.days);
+    return weatherJSON;
   }
 
   function handleWeatherData(dataPromise) {
     dataPromise
       .then((weather) => {
+        // Close loading dialog here
         const { days } = weather;
-        const { icon, conditions, temp } = days[0];
+        const { icon, conditions, temp, datetime } = days[0];
 
         if (icon && conditions && temp) {
-          updateTodayUI(icon, conditions, temp);
+          updateUI(icon, conditions, temp, datetime);
         }
       })
       .catch((error) => {
         console.log(error);
-        updateTodayUI('Error fetching data', 'N/A');
+        updateUI('Error fetching data', 'N/A');
       });
   }
 
-  function updateTodayUI(icon, conditions, temp) {
-    const condition = extractBeforeComma(conditions);
-    UIController.update(icon, condition, temp);
-  }
-
-  function extractBeforeComma(inputString) {
-    const commaIndex = inputString.indexOf(',');
-    if (commaIndex === -1) {
-      // If there's no comma, return the whole string
-      return inputString;
-    }
-    return inputString.substring(0, commaIndex);
+  function updateUI(icon, conditions, temp, date) {
+    UIController.update(icon, conditions, temp, date);
   }
 
   // Initialize
   const weatherData = getWeatherData();
-  console.log(weatherData);
   handleWeatherData(weatherData);
 
   // TESTING
