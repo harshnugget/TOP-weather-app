@@ -1,4 +1,4 @@
-import imageCarouselModule from './ImageCarouselModule';
+import imageCarouselModule from './imageCarouselModule';
 import UIController from './UIController';
 import weatherImages from './weatherImages';
 
@@ -24,8 +24,7 @@ export default function weatherCarousel(weatherData) {
   };
 
   const updateWeatherData = (dayIndex) => {
-    const { icon, conditions, temp, datetime } = weatherData[dayIndex];
-    UIController.update(icon, conditions, temp, datetime);
+    UIController.update(weatherData[dayIndex]);
   };
 
   document

@@ -75,12 +75,14 @@ window.onload = () => {
   function handleWeatherData(dataPromise) {
     dataPromise
       .then((weather) => {
+        const location = document.querySelector('#location');
+        location.textContent = weather.resolvedAddress;
+
         // Close loading dialog here
         const { days } = weather;
-        const { icon, conditions, temp, datetime } = days[0];
 
-        if (icon && conditions && temp) {
-          updateUI(icon, conditions, temp, datetime);
+        if (days) {
+          updateUI(days[0]);
         }
       })
       .catch((error) => {
@@ -89,8 +91,8 @@ window.onload = () => {
       });
   }
 
-  function updateUI(icon, conditions, temp, date) {
-    UIController.update(icon, conditions, temp, date);
+  function updateUI(day) {
+    UIController.update(day);
   }
 
   // Initialize

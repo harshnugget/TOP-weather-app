@@ -1,4 +1,5 @@
 import weatherImages from './weatherImages';
+import dateFormatting from './dateFormatting';
 
 const UIController = (function () {
   const main = document.querySelector('main');
@@ -78,40 +79,37 @@ const UIController = (function () {
     };
   })();
 
-  const formatDate = (date) => {
-    let dateObj = new Date(date);
+  const updateHoursForecast = (hourForecast) => {
+    const numberOfHours = hourForecast.length;
+    const scrollBar = document.querySelector('.scrolling-bar');
+    scrollBar.innerHTML = '';
 
-    // Validate
-    if (isNaN(dateObj.getTime())) {
-      throw new Error(`Incorrect date format: ${date}`);
-    }
-
-    // Convert the date to UTC
-    const day = dateObj.getDate();
-    const monthIndex = dateObj.getMonth();
-    const year = dateObj.getFullYear();
-    dateObj = new Date(Date.UTC(year, monthIndex, day));
-
-    // Get today's date in UTC
-    const today = new Date();
-    const todayUTC = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()));
-
-    // Check if the input date is equal to today's date
-    if (dateObj.getTime() === todayUTC.getTime()) {
-      return 'Today';
-    }
-
-    // Define the formatting options
-    const options = {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric',
+    const extractTime = (timeString) => {
+      const parts = timeString.split(':');
+      return `${parts[0]}:${parts[1]}`;
     };
 
-    // Format the dateObj using the options defined
-    const formattedDate = new Intl.DateTimeFormat('en-UK', options).format(dateObj);
+    for (let i = 0; i < numberOfHours; i++) {
+      const container = document.createElement('div');
+      const imgElement = document.createElement('img');
+      const infoContainer = document.createElement('div');
+      const hourElement = document.createElement('h4');
+      const tempElement = document.createElement('h4');
 
-    return formattedDate;
+      container.classList.add('hour-container');
+      infoContainer.classList.add('info-container');
+
+      hourElement.textContent = extractTime(hourForecast[i].datetime);
+      const temp = Math.floor(hourForecast[i].temp);
+      tempElement.innerHTML = `${temp}&deg;C`;
+
+      const icon = weatherImages(hourForecast[i].icon).staticIcon;
+      imgElement.setAttribute('src', icon);
+
+      infoContainer.append(hourElement, tempElement);
+      container.append(infoContainer, imgElement);
+      scrollBar.append(container);
+    }
   };
 
   const update = (function () {
@@ -120,8 +118,14 @@ const UIController = (function () {
     const todayConditions = todayContainer.querySelector('.conditions');
     const todayTemperature = todayContainer.querySelector('.temperature');
 
-    return function (icon, condition, temp, date) {
-      dateElement.textContent = formatDate(date);
+    return function (day) {
+      console.log(day);
+      const { icon, conditions, temp, datetime, resolvedAddress } = day;
+
+      updateHoursForecast(day.hours);
+
+      // Reformat the date
+      dateElement.textContent = dateFormatting(datetime);
 
       const backgroundImgElement = document.querySelector('.background-img');
 
@@ -137,8 +141,8 @@ const UIController = (function () {
       }
 
       // Update weather conditions
-      todayConditions.textContent = condition;
-      todayTemperature.textContent = temp;
+      todayConditions.textContent = conditions;
+      todayTemperature.innerHTML = `${temp}&deg;C`;
     };
   })();
 
