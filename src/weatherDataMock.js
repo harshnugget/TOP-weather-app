@@ -1,4 +1,4 @@
-const weatherObjectTest = {
+const weatherDataMock = {
   queryCost: 1,
   latitude: 51.5064,
   longitude: -0.12721,
@@ -189,4 +189,4 @@ const weatherObjectTest = {
   },
 };
 
-export default weatherObjectTest;
+export default weatherDataMock;

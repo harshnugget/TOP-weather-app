@@ -11,10 +11,10 @@ const imageCarouselModule = (() => {
         console.warn(
           `imageSources array exceeds limit of ${MAXLENGTH}. Only the first ${MAXLENGTH} images will be used.`
         );
-        imageSources = imageSources.slice(0, MAXLENGTH); // Use only the first [MAXLENGTH] images
+        imageSources = imageSources.slice(0, MAXLENGTH); // Use only the first [MAXLENGTH] images in the array
       }
       this.imageSources = imageSources;
-      this.carousel = {
+      this.elements = {
         container: null,
         content: null,
         rightBtn: null,
@@ -24,9 +24,10 @@ const imageCarouselModule = (() => {
       this.initializeCarousel();
     }
 
+    // Return the index and element of the visible image in the carousel
     getIndexData() {
-      const index = xPos / this.carousel.container.offsetWidth;
-      const element = this.carousel.content.querySelectorAll('img')[index];
+      const index = xPos / this.elements.container.offsetWidth;
+      const element = this.elements.content.querySelectorAll('img')[index];
       return { index, element };
     }
 
@@ -58,8 +59,8 @@ const imageCarouselModule = (() => {
       contentWrapper.append(content);
       container.append(contentWrapper, rightBtn, leftBtn);
 
-      // Store references in this.carousel
-      this.carousel = {
+      // Store references in this.elements
+      this.elements = {
         container,
         content,
         rightBtn,
@@ -72,10 +73,10 @@ const imageCarouselModule = (() => {
       // Start a timer for cycling through carousel automatically
       timer = null; // Set to null for no timer
 
-      this.carousel.content.innerHTML = '';
+      this.elements.content.innerHTML = '';
 
-      const imgWidth = this.carousel.container.offsetWidth;
-      const imgHeight = this.carousel.container.offsetHeight;
+      const imgWidth = this.elements.container.offsetWidth;
+      const imgHeight = this.elements.container.offsetHeight;
 
       // Function to create div containers with image tags
       const createImageContainer = () => {
@@ -101,21 +102,18 @@ const imageCarouselModule = (() => {
         // Set the source attribute for the image
         imageContainer.querySelector('img').setAttribute('src', src);
 
-        this.carousel.content.append(imageContainer);
+        this.elements.content.append(imageContainer);
       });
 
       const initializeButtonEventListeners = () => {
-        this.carousel.rightBtn.addEventListener('click', () => {
+        this.elements.rightBtn.addEventListener('click', () => {
           this.shiftCarousel('right');
         });
 
-        this.carousel.leftBtn.addEventListener('click', () => {
+        this.elements.leftBtn.addEventListener('click', () => {
           this.shiftCarousel('left');
         });
       };
-
-      // Set active navigation dot to the first index
-      // this.setActiveNavigationDot(0);
 
       initializeButtonEventListeners();
     }
@@ -127,8 +125,8 @@ const imageCarouselModule = (() => {
         clearTimeout(timer);
       }
 
-      const imageWidth = this.carousel.container.offsetWidth;
-      const scrollWidth = this.carousel.content.scrollWidth;
+      const imageWidth = this.elements.container.offsetWidth;
+      const scrollWidth = this.elements.content.scrollWidth;
       const numberOfIndices = this.imageSources.length - 1;
       let newPos;
 
@@ -162,8 +160,8 @@ const imageCarouselModule = (() => {
       }
 
       // Apply transform animation
-      this.carousel.content.style.transition = 'transform 0.3s ease';
-      this.carousel.content.style.transform = `translateX(-${newPos}px)`;
+      this.elements.content.style.transition = 'transform 0.3s ease';
+      this.elements.content.style.transform = `translateX(-${newPos}px)`;
 
       // Update xPos
       xPos = newPos;
@@ -174,6 +172,7 @@ const imageCarouselModule = (() => {
       }
     }
 
+    // Timer for shifting automatically shifting through carousel
     startTimer() {
       console.log('shift');
       return setTimeout(() => this.shiftCarousel('right'), 5000);

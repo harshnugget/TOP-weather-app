@@ -11,6 +11,12 @@ const config = {
   module: {
     rules: [
       {
+        test: /\.json$/,
+        type: 'json',
+      },
+    ],
+    rules: [
+      {
         test: /\.svg$/,
         loader: 'svg-inline-loader',
       },

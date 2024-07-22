@@ -2,12 +2,29 @@ import weatherImages from './weatherImages';
 import dateFormatting from './dateFormatting';
 
 const UIController = (function () {
-  const main = document.querySelector('main');
-
   // Create a timer for checking and updating background image
   let timer = null;
 
+  const loadingModal = {
+    modalContent: document.querySelector('#loadingModal > .modal-content'),
+
+    show: function () {
+      this.modalContent.style.visibility = 'visible'; // Show the modal
+      this.modalContent.querySelector('p').textContent = 'Loading...';
+    },
+
+    error: function (error) {
+      this.modalContent.querySelector('p').textContent = 'Could not fetch data';
+      console.warn(error);
+    },
+
+    close: function () {
+      this.modalContent.style.visibility = 'hidden'; // Hide the modal
+    },
+  };
+
   const changeBackgroundImage = (function () {
+    const container = document.querySelector('.container');
     let transitionFlag = 0;
     let queuedBackgroundImgURL = null;
 
@@ -38,7 +55,7 @@ const UIController = (function () {
       imgElement.style.objectFit = 'cover';
       imgElement.style.zIndex = '-2'; // Set a negative z-index to appear behind all other content
 
-      main.append(imgElement);
+      container.append(imgElement);
 
       function fadeOutBackgroundImg() {
         if (currentImgElement) {
@@ -79,8 +96,8 @@ const UIController = (function () {
     };
   })();
 
-  const updateHoursForecast = (hourForecast) => {
-    const numberOfHours = hourForecast.length;
+  const updateHoursForecast = (hourlyForecasts) => {
+    const numberOfHours = hourlyForecasts.length;
     const scrollBar = document.querySelector('.scrolling-bar');
     scrollBar.innerHTML = '';
 
@@ -99,11 +116,11 @@ const UIController = (function () {
       container.classList.add('hour-container');
       infoContainer.classList.add('info-container');
 
-      hourElement.textContent = extractTime(hourForecast[i].datetime);
-      const temp = Math.floor(hourForecast[i].temp);
+      hourElement.textContent = extractTime(hourlyForecasts[i].datetime);
+      const temp = Math.floor(hourlyForecasts[i].temperature);
       tempElement.innerHTML = `${temp}&deg;C`;
 
-      const icon = weatherImages(hourForecast[i].icon).staticIcon;
+      const icon = weatherImages(hourlyForecasts[i].icon).staticIcon;
       imgElement.setAttribute('src', icon);
 
       infoContainer.append(hourElement, tempElement);
@@ -119,34 +136,31 @@ const UIController = (function () {
     const todayTemperature = todayContainer.querySelector('.temperature');
 
     return function (day) {
-      console.log(day);
-      const { icon, conditions, temp, datetime, resolvedAddress } = day;
-
-      updateHoursForecast(day.hours);
+      updateHoursForecast(day.hourlyForecasts);
 
       // Reformat the date
-      dateElement.textContent = dateFormatting(datetime);
+      dateElement.textContent = dateFormatting(day.datetime);
 
       const backgroundImgElement = document.querySelector('.background-img');
 
       // Update background image instantly if there isn't one
       if (!backgroundImgElement) {
-        changeBackgroundImage(weatherImages(icon).bg);
+        changeBackgroundImage(weatherImages(day.icon).bg);
       } else {
         // Set a timer to update background image after a set period of time
         clearTimeout(timer);
         timer = setTimeout(() => {
-          changeBackgroundImage(weatherImages(icon).bg);
+          changeBackgroundImage(weatherImages(day.icon).bg);
         }, 1000);
       }
 
       // Update weather conditions
-      todayConditions.textContent = conditions;
-      todayTemperature.innerHTML = `${temp}&deg;C`;
+      todayConditions.textContent = day.conditions;
+      todayTemperature.innerHTML = `${day.temperature}&deg;C`;
     };
   })();
 
-  return { update };
+  return { update, loadingModal };
 })();
 
 export default UIController;

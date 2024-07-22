@@ -1,12 +1,12 @@
-// Icons
-// Animated
+// Animated Icons
 import cloudy from './images/weather_icons/cloudy.svg';
 import clear from './images/weather_icons/clear.svg';
 import rainy from './images/weather_icons/rainy.svg';
 import partlyCloudy from './images/weather_icons/partly_cloudy.svg';
 import stormy from './images/weather_icons/thunder.svg';
 import snowy from './images/weather_icons/snowy.svg';
-// Static
+
+// Static Icons
 import cloudyStatic from './images/weather_icons/cloudy_static.svg';
 import clearStatic from './images/weather_icons/clear_static.svg';
 import rainyStatic from './images/weather_icons/rainy_static.svg';

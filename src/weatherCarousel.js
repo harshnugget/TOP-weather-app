@@ -18,22 +18,5 @@ export default function weatherCarousel(weatherData) {
     weatherImgContainer
   );
 
-  const getCarouselIndex = () => {
-    const index = carousel.getIndexData().index;
-    return index;
-  };
-
-  const updateWeatherData = (dayIndex) => {
-    UIController.update(weatherData[dayIndex]);
-  };
-
-  document
-    .querySelector('#today-weather > div > button.right-btn')
-    .addEventListener('click', () => {
-      updateWeatherData(getCarouselIndex());
-    });
-
-  document.querySelector('#today-weather > div > button.left-btn').addEventListener('click', () => {
-    updateWeatherData(getCarouselIndex());
-  });
+  return carousel;
 }
