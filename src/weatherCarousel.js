@@ -11,7 +11,7 @@ export default function weatherCarousel(weatherData) {
     imageArray.push(icon);
   });
 
-  const weatherImgContainer = document.querySelector('#today-weather > .weather-img-container');
+  const weatherImgContainer = document.querySelector('#today-weather > .image-carousel-container');
 
   const carousel = new imageCarouselModule.ImageCarousel(
     Object.values(imageArray),

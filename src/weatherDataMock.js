@@ -42,7 +42,7 @@ const weatherDataMock = {
       moonphase: 0.44,
       conditions: 'Partially cloudy',
       description: 'Partly cloudy throughout the day.',
-      icon: 'partly-cloudy-day',
+      icon: 'stormy',
       stations: ['EGWU', 'EGLL', 'D5621', 'EGLC'],
       source: 'obs',
       hours: [

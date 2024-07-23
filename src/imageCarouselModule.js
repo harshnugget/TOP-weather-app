@@ -6,13 +6,6 @@ const imageCarouselModule = (() => {
 
   class ImageCarousel {
     constructor(imageSources = [], carouselContainer) {
-      // Validate array length
-      if (imageSources.length > MAXLENGTH) {
-        console.warn(
-          `imageSources array exceeds limit of ${MAXLENGTH}. Only the first ${MAXLENGTH} images will be used.`
-        );
-        imageSources = imageSources.slice(0, MAXLENGTH); // Use only the first [MAXLENGTH] images in the array
-      }
       this.imageSources = imageSources;
       this.elements = {
         container: null,
@@ -24,6 +17,16 @@ const imageCarouselModule = (() => {
       this.initializeCarousel();
     }
 
+    validateImages() {
+      // Validate array length
+      if (this.imageSources.length > MAXLENGTH) {
+        console.warn(
+          `imageSources array exceeds limit of ${MAXLENGTH}. Only the first ${MAXLENGTH} images will be used.`
+        );
+        this.imageSources = this.imageSources.slice(0, MAXLENGTH); // Use only the first [MAXLENGTH] images in the array
+      }
+    }
+
     // Return the index and element of the visible image in the carousel
     getIndexData() {
       const index = xPos / this.elements.container.offsetWidth;
@@ -32,6 +35,9 @@ const imageCarouselModule = (() => {
     }
 
     buildCarouselStructure(container) {
+      // Validate images
+      this.validateImages();
+
       // Clear container
       container.textContent = null;
 
@@ -70,6 +76,8 @@ const imageCarouselModule = (() => {
 
     // Initialization
     initializeCarousel() {
+      xPos = 0;
+
       // Start a timer for cycling through carousel automatically
       timer = null; // Set to null for no timer
 

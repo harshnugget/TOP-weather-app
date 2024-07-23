@@ -6,6 +6,7 @@ const config = {
   plugins: [
     new HtmlWebpackPlugin({
       template: './src/template.html',
+      favicon: `./src/images/favicon.png`,
     }),
   ],
   module: {

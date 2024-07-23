@@ -1,6 +1,5 @@
-import UIController from './UIController';
-import weatherDataMock from './weatherDataMock';
 import WeatherConditions from './WeatherConditions';
+import weatherDataMock from './weatherDataMock';
 
 class WeatherForecaster {
   constructor(apiKey) {
@@ -81,67 +80,6 @@ class WeatherForecaster {
       return dayForecast;
     });
   }
-}
-
-function getWeatherData(apiKey) {
-  const KEY = apiKey;
-  const loadingModal = UIController.loadingModal;
-  let weatherDataJSON;
-
-  return async function (location) {
-    // If no location provided use test weather object (TEMP)
-    if (!location) {
-      weatherDataJSON = weatherObjectTest;
-    } else {
-      try {
-        // Fetch weather data with provided location
-        const url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?unitGroup=metric&key=${KEY}&contentType=json`;
-
-        // Open loading dialog while fetching url
-        if (loadingModal) {
-          try {
-            loadingModal.show();
-          } catch (err) {
-            console.error(err);
-          }
-        }
-
-        const weatherData = await fetch(url);
-
-        // Handle 400 error
-        if (weatherData.status === 400) {
-          throw new Error('Invalid request!');
-        }
-
-        // Format weather data
-        weatherDataJSON = await weatherData.json();
-
-        // Close loading dialog when data has been fetched
-        if (loadingModal) {
-          try {
-            loadingModal.close();
-          } catch (err) {
-            console.error(err);
-          }
-        }
-      } catch (err) {
-        console.error(err);
-
-        // Show error message in Loading Dialog
-        if (loadingModal) {
-          try {
-            loadingModal.error();
-          } catch (err) {
-            console.error(err);
-          }
-        }
-
-        throw error; // Reject promise
-      }
-    }
-
-    return weatherDataJSON;
-  };
 }
 
 export default WeatherForecaster;

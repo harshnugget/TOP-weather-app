@@ -9,38 +9,43 @@
 </head>
 
 <body>
-    <div class="container">
-        <header>
-            <h1>Weather App</h1>
-            <div id="location-input-container">
-                <label for="location-input">Location: </label>
-                <input id="location-input" type="text" name="location-input">
-                <button id="get-weather-btn" type="button">Get weather</button>
-            </div>
-        </header>
-        <main>
-            <div id="loadingModal" class="modal">
+    <header>
+        <h1>WEATHER APP</h1>
+        <div id="location-input-container">
+            <label for="location-input">Location: </label>
+            <input id="location-input" type="text" name="location-input">
+            <div id="loadingDialogBox" class="modal">
                 <div class="modal-content">
                     <p>Loading...</p>
                 </div>
             </div>
-            <div id="today-weather">
-                <h3 id="location"></h3>
-                <h2 class="date">Today</h2>
-                <div class="weather-img-container image-carousel-container">
-                    <img src="" alt="">
-                </div>
-                <h3>Conditions: <span class="conditions"></span></h3>
-                <h3>Temperature: <span class="temperature"></span></h3>
-            </div>
-            <div class="scrolling-bar">
-            </div>
+            <button id="get-weather-btn" type="button">Get weather</button>
+        </div>
+    </header>
+    <main>
+        <div id="today-weather">
+            <h3 id="location"></h3>
+            <h2 class="date">Today</h2>
             <div class="image-carousel-container">
-                <!-- Image elements here -->
+                <img src="" alt="">
             </div>
-        </main>
-    </div>
-    <footer>harshnugget</footer>
+            <h3>Conditions: <span class="conditions"></span></h3>
+            <h3>Temperature: <span class="temperature"></span></h3>
+        </div>
+        <div class="scrolling-bar">
+            <div class="hour-container">
+                <div class="info-container">
+                    <h4 class="hour">00:00</h4>
+                    <h4 class="temperature">24&deg;C</h4>
+                </div>
+                <img class="weather-icon" src="" alt="weather-icon">
+            </div>
+        </div>
+        <div class="image-carousel-container">
+            <!-- Images here -->
+        </div>
+    </main>
+    <footer>The Odin Project | <a href="url">https://github.com/harshnugget</a> / GH</footer>
 </body>
 
 </html>
