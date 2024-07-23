@@ -22,6 +22,18 @@ import stormyBg from './images/wallpapers/stormy.png';
 import snowyBg from './images/wallpapers/snowy.png';
 import cloudyBg from './images/wallpapers/cloudy.png';
 
+// Function to preload images
+function preloadImages(imageArray) {
+  imageArray.forEach((src) => {
+    const img = new Image();
+    img.src = src;
+    console.log(img);
+  });
+}
+
+// Preload background images
+preloadImages([clearSkyBg, partlyCloudyBg, rainyBg, stormyBg, snowyBg, cloudyBg]);
+
 const weatherImages = (() => {
   let icon;
   let staticIcon;
