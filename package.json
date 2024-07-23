@@ -1,7 +1,7 @@
 {
-  "name": "todo-list",
+  "name": "weather-app",
   "version": "1.0.0",
-  "description": "The Odin Project / Todo List assignment",
+  "description": "The Odin Project / Weather App assignment",
   "private": true,
   "scripts": {
     "build": "webpack --config webpack.prod.js",

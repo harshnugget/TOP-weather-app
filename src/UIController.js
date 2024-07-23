@@ -39,11 +39,11 @@ const UIController = (function () {
     }
 
     return function (url) {
-      nextUrl = url;
-
       if (timeoutId) {
         clearTimeout(timeoutId);
       }
+
+      nextUrl = url;
 
       // Update background image instantly if there isn't one
       if (!document.body.style.backgroundImage) {
