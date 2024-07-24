@@ -6,6 +6,9 @@ import WeatherForecaster from './WeatherForecaster';
 const API_KEY = '8LS8VNK8Q95T49ELEPT3AUNV5';
 
 window.onload = () => {
+  // Unhide body
+  document.body.classList.remove('hide');
+
   const weatherForecaster = new WeatherForecaster(API_KEY);
   window.weather = weatherForecaster; // For testing
 

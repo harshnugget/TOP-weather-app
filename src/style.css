@@ -12,6 +12,10 @@ body {
   height: max-content;
 }
 
+.hide {
+  visibility: hidden;
+}
+
 /* Header styles */
 header {
   display: flex;
