@@ -60,8 +60,6 @@ const UIController = (function () {
 
   const updateHoursForecast = (() => {
     const scrollBar = document.querySelector('.scrolling-bar');
-
-    // Create a clone of the hour container template element
     const hourContainer = scrollBar.querySelector('.hour-container');
 
     return function (hourlyForecasts) {

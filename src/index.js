@@ -59,28 +59,33 @@ window.onload = () => {
     });
   }
 
-  getWeatherForecast();
+  function initializeEventListeners() {
+    const locationInput = document.querySelector('#location-input');
+    const getWeatherBtn = document.querySelector('#get-weather-btn');
 
-  const locationInput = document.querySelector('#location-input');
-  const getWeatherBtn = document.querySelector('#get-weather-btn');
+    locationInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        // Retrieve value from the location input box
+        const location = locationInput.value;
+        if (!location) {
+          return;
+        }
+        getWeatherForecast(location);
+      }
+    });
 
-  locationInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
+    getWeatherBtn.addEventListener('click', () => {
       // Retrieve value from the location input box
       const location = locationInput.value;
       if (!location) {
         return;
       }
       getWeatherForecast(location);
-    }
-  });
+    });
+  }
 
-  getWeatherBtn.addEventListener('click', () => {
-    // Retrieve value from the location input box
-    const location = locationInput.value;
-    if (!location) {
-      return;
-    }
-    getWeatherForecast(location);
-  });
+  initializeEventListeners();
+
+  // Default weather forecast request
+  getWeatherForecast();
 };
