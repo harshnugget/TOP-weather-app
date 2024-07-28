@@ -58,8 +58,8 @@ const imageCarouselModule = (() => {
       leftBtn.setAttribute('type', 'button');
 
       // Set text content for buttons
-      rightBtn.innerHTML = '&#11166'; // Unicode character or text
-      leftBtn.innerHTML = '&#11164'; // Unicode character or text
+      rightBtn.innerHTML = '▶'; // Unicode character or text
+      leftBtn.innerHTML = '◀'; // Unicode character or text
 
       // Append elements to container
       contentWrapper.append(content);
