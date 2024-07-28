@@ -87,5 +87,5 @@ window.onload = () => {
   initializeEventListeners();
 
   // Default weather forecast request
-  getWeatherForecast();
+  getWeatherForecast('London');
 };

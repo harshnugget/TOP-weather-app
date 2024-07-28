@@ -5,6 +5,7 @@ import rainy from './images/weather_icons/rainy.svg';
 import partlyCloudy from './images/weather_icons/partly_cloudy.svg';
 import stormy from './images/weather_icons/thunder.svg';
 import snowy from './images/weather_icons/snowy.svg';
+import night from './images/weather_icons/night.svg';
 
 // Static Icons
 import cloudyStatic from './images/weather_icons/cloudy_static.svg';
@@ -13,6 +14,7 @@ import rainyStatic from './images/weather_icons/rainy_static.svg';
 import partlyCloudyStatic from './images/weather_icons/partly_cloudy_static.svg';
 import stormyStatic from './images/weather_icons/thunder_static.svg';
 import snowyStatic from './images/weather_icons/snowy_static.svg';
+import nightStatic from './images/weather_icons/night_static.svg';
 
 // Backgrounds
 import clearSkyBg from './images/wallpapers/sunny.png';
@@ -45,6 +47,7 @@ const weatherImages = (() => {
     partlyCloudy: { icon: partlyCloudy, staticIcon: partlyCloudyStatic, bg: partlyCloudyBg },
     stormy: { icon: stormy, staticIcon: stormyStatic, bg: stormyBg },
     snowy: { icon: snowy, staticIcon: snowyStatic, bg: snowyBg },
+    night: { icon: night, staticIcon: nightStatic, bg: clearSkyBg }, // ? Update bg image
   };
 
   return function (description) {
@@ -81,6 +84,10 @@ const weatherImages = (() => {
         staticIcon = images.snowy.staticIcon;
         bg = images.snowy.bg;
         break;
+      case 'clear-night':
+        icon = images.night.icon;
+        staticIcon = images.night.staticIcon;
+        bg = images.night.bg;
     }
     return { icon, staticIcon, bg };
   };
